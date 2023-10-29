@@ -5,8 +5,6 @@
 constexpr int WIDTH = 720;
 constexpr int HEIGHT = 720;
 
-
-
 int main()
 {
     // ------------------- INIALIZE -----------------
@@ -14,14 +12,28 @@ int main()
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
 
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "RPG");
-
-    // class objects;
+    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "RPG", sf::Style::Default, settings);
   
-    // ----- LOAD IMAGE ------ 
+    // ----- LOAD ENEMY TEXTURE ------ 
+    sf::Texture enemyTexture;
+    sf::Sprite enemySprite;
+
+    if (enemyTexture.loadFromFile("C:\\Users\\Golden\\Desktop\\rpg-game-tutorial\\RPG\\assets\\Skeleton\\Texture\\spritesheet.png"))
+    {
+        std::cout << "Enemy texture loaded successfully" << std::endl;
+        int XIndex = 1;
+        int YIndex = 3;
+        enemySprite.setTexture(enemyTexture);
+        enemySprite.setTextureRect(sf::IntRect(XIndex * 64, YIndex * 64, 64, 64)); // Setting the rectangle for the sprite
+    }
+    else
+    {
+        std::cout << "Cannot Load an Image" << std::endl;
+    }
+
+    // ----- LOAD PLAYER TEXTURE ------ 
     sf::Texture playertexture;
     sf::Sprite playersprite;
-
     // loading a texture
     if (playertexture.loadFromFile("C:\\Users\\Golden\\Desktop\\rpg-game-tutorial\\RPG\\assets\\Player\\Texture\\spritesheet.png"))
     {
@@ -31,7 +43,7 @@ int main()
         int YIndex = 0; // y axes
 
         playersprite.setTexture(playertexture);
-        playersprite.setTextureRect(sf::IntRect(XIndex * 64, YIndex * 64, 64, 64)); // setting up a rectangle
+        playersprite.setTextureRect(sf::IntRect(XIndex * 64, YIndex * 64, 64, 64)); // Setting the rectangle for the sprite
     }
     else
     {
@@ -39,7 +51,7 @@ int main()
     }
   
     
-
+    printf("Hello");
 
     // ------- GANE LOOP ------
 
@@ -58,25 +70,42 @@ int main()
         }
 
         // PLAYERS MOVEMENT
-        sf::Vector2f position = playersprite.getPosition();
+        sf::Vector2f positionPlayer = playersprite.getPosition();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         {   
-            playersprite.setPosition(position - sf::Vector2f(0, 1)); // curr position - 1 units to the y axis
+            playersprite.setPosition(positionPlayer + sf::Vector2f(0, -1)); // curr position - 1 units to the y axis
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {      
-            playersprite.setPosition(position + sf::Vector2f(0, 1)); // curr position + 1 units to the y axis
+            playersprite.setPosition(positionPlayer + sf::Vector2f(0, 1)); // curr position + 1 units to the y axis
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
         {
-            playersprite.setPosition(position + sf::Vector2f(1, 0)); // curr position + 1 units to the x axis
+            playersprite.setPosition(positionPlayer + sf::Vector2f(1, 0)); // curr position + 1 units to the x axis
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
-            playersprite.setPosition(position - sf::Vector2f(1, 0)); // curr position - 1 units to the x axis
+            playersprite.setPosition(positionPlayer + sf::Vector2f(-1, 0)); // curr position - 1 units to the x axis
         }
            
-
+        // Enemy Movement
+        sf::Vector2f positionEnemy = enemySprite.getPosition();
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        {
+            enemySprite.setPosition(positionEnemy + sf::Vector2f(0, -1));
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        {
+            enemySprite.setPosition(positionEnemy + sf::Vector2f(0, 1));
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        {
+            enemySprite.setPosition(positionEnemy + sf::Vector2f(-1, 0));
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        {
+            enemySprite.setPosition(positionEnemy + sf::Vector2f(1,0));
+        }
 
 
         /* --------------------------- DRAW -----------------
@@ -89,6 +118,7 @@ int main()
 
       
         window.draw(playersprite);
+        window.draw(enemySprite);
         // copying data from the back buffer
         window.display();
     }
