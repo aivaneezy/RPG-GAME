@@ -5,6 +5,8 @@
 constexpr int WIDTH = 720;
 constexpr int HEIGHT = 720;
 
+
+
 int main()
 {
     // ------------------- INIALIZE -----------------
@@ -14,34 +16,32 @@ int main()
 
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "RPG");
 
-    // SHAPES
-    sf::CircleShape shape;
-    shape.setRadius(50.0f);
-    shape.setFillColor(sf::Color::Red);
-    shape.setPosition(100.f ,200.f);
-    std::cout << "Radius = " << shape.getRadius() << std::endl;
-    shape.setOutlineThickness(10.f);
+    // class objects;
+  
+    // ----- LOAD IMAGE ------ 
+    sf::Texture playertexture;
+    sf::Sprite playersprite;
 
-    sf::CircleShape Polygon;
-    Polygon.setRadius(50.0f);
-    Polygon.setPointCount(3);
-    Polygon.setFillColor(sf::Color::Green);
+    // loading a texture
+    if (playertexture.loadFromFile("C:\\Users\\Golden\\Desktop\\rpg-game-tutorial\\RPG\\assets\\Player\\Texture\\spritesheet.png"))
+    {
+        std::cout << "Loaded Successfully" << std::endl;
 
-    sf::RectangleShape rect;
-    rect.setSize(sf::Vector2f(100.f, 50.f));
-    rect.setPosition(100.f, 100.f);
-    rect.setFillColor(sf::Color::Blue);
-    rect.setOrigin(sf::Vector2f(rect.getSize() / 2.0f));
-    rect.setRotation(45.f);
+        int XIndex = 0; // x axes
+        int YIndex = 0; // y axes
 
-    sf::RectangleShape line(sf::Vector2f(150.f, 5.f));
-    line.setPosition(200.f, 150.f);
-    std::cout << "Rotate = " << line.getRotation();
-    line.rotate(330.f);
-
+        playersprite.setTexture(playertexture);
+        playersprite.setTextureRect(sf::IntRect(XIndex * 64, YIndex * 64, 64, 64)); // setting up a rectangle
+    }
+    else
+    {
+        std::cout << "Cannot Load an Image" << std::endl;
+    }
+  
+    
 
 
-
+    // ------- GANE LOOP ------
 
     // main game loop
     while (window.isOpen())
@@ -50,11 +50,32 @@ int main()
         sf::Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed) window.close();
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+            }
+            
+        }
 
-        } // end whie loop
-
-       
+        // PLAYERS MOVEMENT
+        sf::Vector2f position = playersprite.getPosition();
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        {   
+            playersprite.setPosition(position - sf::Vector2f(0, 1)); // curr position - 1 units to the y axis
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        {      
+            playersprite.setPosition(position + sf::Vector2f(0, 1)); // curr position + 1 units to the y axis
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        {
+            playersprite.setPosition(position + sf::Vector2f(1, 0)); // curr position + 1 units to the x axis
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
+            playersprite.setPosition(position - sf::Vector2f(1, 0)); // curr position - 1 units to the x axis
+        }
+           
 
 
 
@@ -64,13 +85,10 @@ int main()
         */
         
         // drawing data to the back buffer 
-        window.clear(sf::Color::Black);
+        window.clear(sf::Color::Blue);
 
-        window.draw(shape);
-        window.draw(Polygon);
-        window.draw(rect);
-        window.draw(line);
-
+      
+        window.draw(playersprite);
         // copying data from the back buffer
         window.display();
     }
