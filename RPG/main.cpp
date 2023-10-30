@@ -5,7 +5,7 @@
 
 constexpr int WIDTH = 720;
 constexpr int HEIGHT = 720;
-constexpr float BULLETSPEED = 0.1f;
+constexpr float BULLETSPEED = 0.3f;
 
 /*
  normalizing the vector Formula :a
@@ -34,6 +34,16 @@ int main()
     settings.antialiasingLevel = 8;
 
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "RPG", sf::Style::Default, settings);
+
+    // ---------------- SHOOTING A BULLETS ----------------------
+   /*
+       SHOOTING A BULLET DIRECTION FORMULA : DIRECTION = (TARGET - CURRENT POSITION).normalize()
+       the normalize is to convert a vector into a  units.
+   */
+   // vector of multiple bullets
+    std::vector<sf::RectangleShape> bullets;
+  
+   
 
 
     // ---------------- LOAD TEXTURE -------------------------------
@@ -76,24 +86,6 @@ int main()
     }
 
 
-
-    // ---------------- SHOOTING A BULLETS ----------------------
-   /*
-       SHOOTING A BULLET DIRECTION FORMULA : DIRECTION = (TARGET - CURRENT POSITION).normalize()
-       the normalize is to convert a vector into a  units.
-   */
-   // vector of multiple bullets
-    std::vector<sf::RectangleShape> bullets;
-
-
-    sf::RectangleShape bullet(sf::Vector2f(50.f, 25.f));
-    bullet.setPosition(playersprite.getPosition()); // Initial Position
-
-    /* Calculate  direction for the bullet*/
-    sf::Vector2f direction = enemySprite.getPosition() - bullet.getPosition();
-    direction = normalizeVector(direction);
-
-
     // ----------------------  GAME LOOP ----------------------
 
     while (window.isOpen())
@@ -107,17 +99,13 @@ int main()
                 window.close();
             }
         }
-        /* Moving the bullets to a target*/
-        sf::Vector2f bullet_direction = bullet.getPosition();
-        bullet.setPosition(bullet_direction + direction * BULLETSPEED); // multipying of a very small amount to normalize the vector
-
-
+     
 
         // PLAYERS MOVEMENT
         sf::Vector2f positionPlayer = playersprite.getPosition();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         {
-            playersprite.setPosition(positionPlayer + sf::Vector2f(0, -1)); // curr position - 1 units to the y axis
+            playersprite.setPosition(positionPlayer - sf::Vector2f(0, 1)); // curr position - 1 units to the y axis
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
         {
@@ -129,14 +117,14 @@ int main()
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
         {
-            playersprite.setPosition(positionPlayer + sf::Vector2f(-1, 0)); // curr position - 1 units to the x axis
+            playersprite.setPosition(positionPlayer - sf::Vector2f(1, 0)); // curr position - 1 units to the x axis
         }
 
         // Enemy Movement
         sf::Vector2f positionEnemy = enemySprite.getPosition();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
         {
-            enemySprite.setPosition(positionEnemy + sf::Vector2f(0, -1));
+            enemySprite.setPosition(positionEnemy - sf::Vector2f(0, 1));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
         {
@@ -144,12 +132,40 @@ int main()
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
         {
-            enemySprite.setPosition(positionEnemy + sf::Vector2f(-1, 0));
+            enemySprite.setPosition(positionEnemy - sf::Vector2f(1, 0));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
         {
             enemySprite.setPosition(positionEnemy + sf::Vector2f(1, 0));
         }
+
+        // EVENT FOR MOUSE FOR THE BULLETS
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
+        {
+            bullets.push_back(sf::RectangleShape(sf::Vector2f(50.f, 25.f)));
+
+            int lastElement = bullets.size() - 1; // last element of the vector
+            bullets[lastElement].setPosition(playersprite.getPosition()); // Bullet Initial Position
+
+        }
+
+        /* Moving the bullets to a target*/
+        //sf::Vector2f bullet_direction = bullet.getPosition();
+        //bullet.setPosition(bullet_direction + direction * BULLETSPEED); // multipying of a very small amount to normalize the vector
+        for (int i = 0; i < bullets.size(); i++)
+        {
+            /* Calculating the  direction for the bullet, putting the bullet inside the  for loop is useful so that each bullets has its own calculation 
+            in each single frame when a player shot.
+            */
+            sf::Vector2f direction = enemySprite.getPosition() - bullets[i].getPosition();
+          
+            /* Moving the bullets to a target*/
+            direction = normalizeVector(direction);
+            bullets[i].setPosition(bullets[i].getPosition() + direction * BULLETSPEED);
+        }
+
+
+
 
 
         /* --------------------------- DRAW -----------------
@@ -163,7 +179,12 @@ int main()
 
         window.draw(playersprite);
         window.draw(enemySprite);
-        //window.draw(bullet);
+
+        for (int i = 0; i < bullets.size(); i++)
+        {
+            window.draw(bullets[i]);
+        }
+        
         // copying data from the back buffer
         window.display();
     }
