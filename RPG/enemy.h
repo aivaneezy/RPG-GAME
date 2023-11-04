@@ -9,6 +9,9 @@ public:
 	void Update();
 	void Draw(sf::RenderWindow& window);
 
+	// collision detection test
+	sf::RectangleShape boundingshape2;
+
 public:
 	sf::Sprite enemySprite;
 private:

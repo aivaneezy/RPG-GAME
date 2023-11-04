@@ -14,6 +14,9 @@ public:
 	void Update(Enemy& enemy); // Update called once per frame
 	void Draw(sf::RenderWindow& window); // Draw called once per fame
 
+	// collision detection test
+	sf::RectangleShape boudingRectangle;
+
 
 public:
 	sf::Sprite playerSprite;

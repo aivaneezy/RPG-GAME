@@ -4,9 +4,15 @@
 #include <vector>
 #include "player.h"
 #include "mathh.h"
+
+#define SPRITE_HEIGHT 64
+#define SPRITE_WIDTH 64
 void Player::Initialize()
 {
-   
+    boudingRectangle.setFillColor(sf::Color::Transparent);
+    boudingRectangle.setOutlineColor(sf::Color::Red);
+    boudingRectangle.setOutlineThickness(1);
+    boudingRectangle.setSize(sf::Vector2f(SPRITE_WIDTH, SPRITE_HEIGHT));
 }
 
 void Player::LoadplayerTexture()
@@ -19,7 +25,7 @@ void Player::LoadplayerTexture()
         int YIndex = 0; // y axes
 
        playerSprite.setTexture(Player::playerTexture);
-       playerSprite.setTextureRect(sf::IntRect(XIndex * 64, YIndex * 64, 64, 64)); // Setting the rectangle for the sprite
+       playerSprite.setTextureRect(sf::IntRect(XIndex * SPRITE_WIDTH, YIndex * SPRITE_HEIGHT, SPRITE_WIDTH, SPRITE_HEIGHT)); // Setting the rectangle for the sprite
        playerSprite.setPosition(sf::Vector2f(600, 600)); // Initial position
     }
     else
@@ -38,6 +44,7 @@ void Player::Update(Enemy& enemy)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
     {
         playerSprite.setPosition(positionPlayer - sf::Vector2f(0, 1)); // curr position - 1 units to the y axis
+
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
@@ -62,7 +69,6 @@ void Player::Update(Enemy& enemy)
 
     }
 
-
     // ---------------- SHOOTING A BULLETS ----------------------
 /*
     SHOOTING A BULLET DIRECTION FORMULA : DIRECTION = (TARGET - CURRENT POSITION).normalize()
@@ -81,12 +87,22 @@ void Player::Update(Enemy& enemy)
         bullets[i].setPosition(bullets[i].getPosition() + direction * bulletspeed); // multipying of a very small amount to normalize the vector
     }
 
+    // make the rectangle follow the sprite
+    boudingRectangle.setPosition(playerSprite.getPosition());
+
+
+    if (Math::CheckRectCollision(playerSprite.getGlobalBounds(), enemy.enemySprite.getGlobalBounds()))
+    {
+        std::cout << "Collison detection" << std::endl;
+    }
+
 }
 
 
 void  Player::Draw(sf::RenderWindow& window)
 {
      window.draw(playerSprite);
+     window.draw(boudingRectangle);
      for (int i = 0; i < bullets.size(); i++)
      {
          window.draw(bullets[i]);

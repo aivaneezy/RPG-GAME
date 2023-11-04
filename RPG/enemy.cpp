@@ -2,10 +2,15 @@
 #include "enemy.h"
 
 
-
+#define SPRITE_HEIGHT 64
+#define SPRITE_WIDTH 64
 void Enemy::Initialize()
 {
-
+    /*COLLISION DETECTION TEST*/
+    boundingshape2.setFillColor(sf::Color::Transparent);
+    boundingshape2.setOutlineColor(sf::Color::Blue);
+    boundingshape2.setOutlineThickness(1);
+    boundingshape2.setSize(sf::Vector2f(SPRITE_WIDTH, SPRITE_HEIGHT));
 }
 
 void Enemy::LoadenemyTexture()
@@ -19,7 +24,7 @@ void Enemy::LoadenemyTexture()
         int XIndex = 1;
         int YIndex = 3;
         enemySprite.setTexture(enemyTexture);
-        enemySprite.setTextureRect(sf::IntRect(XIndex * 64, YIndex * 64, 64, 64)); // Setting the rectangle for the sprite
+        enemySprite.setTextureRect(sf::IntRect(XIndex * SPRITE_WIDTH, YIndex * SPRITE_HEIGHT, SPRITE_WIDTH, SPRITE_HEIGHT)); // Setting the rectangle for the sprite
         enemySprite.setPosition(400, 0); // Initial Position
     }
     else
@@ -48,10 +53,14 @@ void Enemy::Update()
     {
         enemySprite.setPosition(positionEnemy + sf::Vector2f(1, 0));
     }
+
+    /*RECTANGLE FOLLOW THE ENEMY SPRITE*/
+    boundingshape2.setPosition(enemySprite.getPosition());
 }
 
 void Enemy::Draw(sf::RenderWindow &window)
 {
 
     window.draw(enemySprite);
+    window.draw(boundingshape2);
 }
