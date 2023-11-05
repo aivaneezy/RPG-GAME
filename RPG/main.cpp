@@ -24,7 +24,7 @@ int main()
     settings.antialiasingLevel = 8;
 
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "RPG", sf::Style::Default, settings);
- 
+    window.setFramerateLimit(240); // setting up the framerate because it will lag idk why??? (to fix )
     /*Player Class Object*/
     Player player;
     player.Initialize();
@@ -36,8 +36,11 @@ int main()
     enemy.LoadenemyTexture();
     
     // ----------------------  GAME LOOP ----------------------
+
+    sf::Clock clock;
     while (window.isOpen())
     {
+     
         // -------------------------- UPDATE --------------------
         sf::Event event;
         while (window.pollEvent(event))
@@ -47,12 +50,18 @@ int main()
                 window.close();
             }
         }
+
+        // FRAME CAPPING
+        sf::Time deltaTimeTimer = clock.restart();;
+        float deltaTime = deltaTimeTimer.asMilliseconds();
+
      
-        player.Update(enemy); // player movement
-        enemy.Update(); // enemy movement
+
+        player.Update(deltaTime, enemy); // player movement
+        enemy.Update(deltaTime); // enemy movement
         
 
-    
+ 
         /* --------------------------- DRAW -----------------
         We are doing all our drawing before copying all the data from the
         back bufffer to the main screen
@@ -65,6 +74,8 @@ int main()
       
         // copying data from the back buffer
         window.display();
+
+   
     }
 
     return 0;

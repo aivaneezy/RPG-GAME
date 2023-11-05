@@ -33,7 +33,7 @@ void Enemy::LoadenemyTexture()
     }
 }
 
-void Enemy::Update()
+void Enemy::Update(float deltatTime)
 {
     // Enemy Movement
     sf::Vector2f positionEnemy = enemySprite.getPosition();

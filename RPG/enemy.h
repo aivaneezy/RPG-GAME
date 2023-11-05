@@ -6,9 +6,10 @@ class Enemy
 public:
 	void Initialize();
 	void LoadenemyTexture();
-	void Update();
+	void Update(float deltatTime);
 	void Draw(sf::RenderWindow& window);
 
+	// 
 	// collision detection test
 	sf::RectangleShape boundingshape2;
 

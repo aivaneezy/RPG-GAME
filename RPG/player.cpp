@@ -36,27 +36,27 @@ void Player::LoadplayerTexture()
 
 
 
-void Player::Update(Enemy& enemy)
+void Player::Update(float deltaTime, Enemy& enemy)
 {
 
     // PLAYERS MOVEMENT
     sf::Vector2f positionPlayer = playerSprite.getPosition();
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
     {
-        playerSprite.setPosition(positionPlayer - sf::Vector2f(0, 1)); // curr position - 1 units to the y axis
-
+        playerSprite.setPosition(positionPlayer - sf::Vector2f(0, 1) * playerSpeed * deltaTime); // curr position - 1 units to the y axis
+       
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
-        playerSprite.setPosition(positionPlayer + sf::Vector2f(0, 1)); // curr position + 1 units to the y axis
+        playerSprite.setPosition(positionPlayer + sf::Vector2f(0, 1) * playerSpeed * deltaTime); // curr position + 1 units to the y axis
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
-        playerSprite.setPosition(positionPlayer + sf::Vector2f(1, 0)); // curr position + 1 units to the x axis
+        playerSprite.setPosition(positionPlayer + sf::Vector2f(1, 0) * playerSpeed * deltaTime); // curr position + 1 units to the x axis
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
-        playerSprite.setPosition(positionPlayer - sf::Vector2f(1, 0)); // curr position - 1 units to the x axis
+        playerSprite.setPosition(positionPlayer - sf::Vector2f(1, 0) * playerSpeed * deltaTime); // curr position - 1 units to the x axis
     }
 
     // EVENT FOR MOUSE FOR THE BULLETS
@@ -84,7 +84,7 @@ void Player::Update(Enemy& enemy)
 
         /* Moving the bullets to a target*/
         direction = Math::normalizeVector(direction);
-        bullets[i].setPosition(bullets[i].getPosition() + direction * bulletspeed); // multipying of a very small amount to normalize the vector
+        bullets[i].setPosition(bullets[i].getPosition() + direction * bulletspeed * deltaTime); // multipying of a very small amount to normalize the vector
     }
 
     // make the rectangle follow the sprite
@@ -95,6 +95,7 @@ void Player::Update(Enemy& enemy)
     {
         std::cout << "Collison detection" << std::endl;
     }
+  
 
 }
 
