@@ -75,7 +75,7 @@ int main()
         // copying data from the back buffer
         window.display();
 
-        std::cout << "test commit" << std::endl;
+        std::cout << "test commit1" << std::endl;
     }
 
     return 0;
