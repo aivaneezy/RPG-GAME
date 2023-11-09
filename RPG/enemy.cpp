@@ -4,6 +4,18 @@
 
 #define SPRITE_HEIGHT 64
 #define SPRITE_WIDTH 64
+
+/*Costructor*/
+Enemy::Enemy()
+{
+}
+
+/*Decostructort*/
+Enemy::~Enemy()
+{
+
+}
+
 void Enemy::Initialize()
 {
     /*COLLISION DETECTION TEST*/

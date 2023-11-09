@@ -7,6 +7,22 @@
 
 #define SPRITE_HEIGHT 64
 #define SPRITE_WIDTH 64
+
+/*Costructor*/
+Player::Player() :
+    bulletspeed(0.3f),
+    playerSpeed(2.0f)
+{
+}
+
+/*Decostructor*/
+Player::~Player()
+{
+
+}
+
+
+
 void Player::Initialize()
 {
     boudingRectangle.setFillColor(sf::Color::Transparent);

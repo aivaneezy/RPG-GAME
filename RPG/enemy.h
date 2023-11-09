@@ -4,12 +4,14 @@
 class Enemy
 {
 public:
+	Enemy();
+	~Enemy();
 	void Initialize();
 	void LoadenemyTexture();
 	void Update(float deltatTime);
 	void Draw(sf::RenderWindow& window);
 
-	// 
+	
 	// collision detection test
 	sf::RectangleShape boundingshape2;
 

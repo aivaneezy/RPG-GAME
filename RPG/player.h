@@ -9,6 +9,8 @@
 class Player
 {
 public:
+	Player();
+	~Player();
 	void Initialize(); // called only once
 	void LoadplayerTexture(); // called only once
 	void Update(float deltatTime, Enemy& enemy); // Update called once per frame
@@ -21,8 +23,9 @@ public:
 public:
 	sf::Sprite playerSprite;
 private:
+	
 	sf::Texture playerTexture;
 	std::vector<sf::RectangleShape> bullets; // vector of multiple bullets
-	float bulletspeed = 0.3f;
-	float playerSpeed = 2.0f;
+	float bulletspeed;
+	float playerSpeed;
 };

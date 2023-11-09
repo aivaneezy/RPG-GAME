@@ -4,7 +4,7 @@
 #include <vector>
 #include "player.h"
 #include "enemy.h"
-
+#include "frameRate.h"
 constexpr int WIDTH = 720;
 constexpr int HEIGHT = 720;
 
@@ -24,7 +24,7 @@ int main()
     settings.antialiasingLevel = 8;
 
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "RPG", sf::Style::Default, settings);
-    window.setFramerateLimit(240); // setting up the framerate because it will lag idk why??? (to fix )
+    window.setFramerateLimit(60); // setting up the framerate because it will lag idk why??? (to fix )
     /*Player Class Object*/
     Player player;
     player.Initialize();
@@ -34,13 +34,17 @@ int main()
     Enemy enemy;
     enemy.Initialize();
     enemy.LoadenemyTexture();
+
+    /*FPS CLASS object*/
+    FrameRate framerate;
+    framerate.Load();
     
     // ----------------------  GAME LOOP ----------------------
 
     sf::Clock clock;
     while (window.isOpen())
     {
-     
+       
         // -------------------------- UPDATE --------------------
         sf::Event event;
         while (window.pollEvent(event))
@@ -48,15 +52,19 @@ int main()
             if (event.type == sf::Event::Closed)
             {
                 window.close();
-            }
         }
 
-        // FRAME CAPPING
+            }
+        /*DELTA TIME how long it takes to render a single frame.
+            Conversion : 1 sec = 1000 ms.
+                         1 ms = 1000 us
+        */
         sf::Time deltaTimeTimer = clock.restart();;
-        float deltaTime = deltaTimeTimer.asMilliseconds();
-
-     
-
+        double deltaTime = deltaTimeTimer.asMicroseconds() / 1000.0;
+      
+        
+        /*Rendering FPS*/
+        framerate.Update(deltaTime, player);
         player.Update(deltaTime, enemy); // player movement
         enemy.Update(deltaTime); // enemy movement
         
@@ -70,12 +78,12 @@ int main()
 
         player.Draw(window); // Drawing the player sprite
         enemy.Draw(window); // Drawing the enemy sprite
-
+        framerate.Draw(window); // Drawing the framerate sprite
       
         // copying data from the back buffer
         window.display();
 
-        std::cout << "test commit1" << std::endl;
+       
     }
 
     return 0;
