@@ -60,12 +60,14 @@ int main()
                          1 ms = 1000 us
         */
         sf::Time deltaTimeTimer = clock.restart();;
-        double deltaTime = deltaTimeTimer.asMicroseconds() / 1000.0;
-      
+        double deltaTime = deltaTimeTimer.asMicroseconds() / 1000.0; // dividing by 1000 to convert to to milliseconds
+
+        /* Getting the mouse position relative to the window*/
+        sf::Vector2f mousePosition = sf::Vector2f((sf::Mouse::getPosition(window))); 
         
         /*Rendering FPS*/
         framerate.Update(deltaTime, player);
-        player.Update(deltaTime, enemy); // player movement
+        player.Update(deltaTime, enemy, mousePosition); // player movement
         enemy.Update(deltaTime); // enemy movement
         
 

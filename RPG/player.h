@@ -13,7 +13,7 @@ public:
 	~Player();
 	void Initialize(); // called only once
 	void LoadplayerTexture(); // called only once
-	void Update(float deltatTime, Enemy& enemy); // Update called once per frame
+	void Update(float deltatTime, Enemy& enemy, sf::Vector2f &mousePos); // Update called once per frame
 	void Draw(sf::RenderWindow& window); // Draw called once per fame
 
 	// collision detection test
@@ -28,4 +28,6 @@ private:
 	std::vector<sf::RectangleShape> bullets; // vector of multiple bullets
 	float bulletspeed;
 	float playerSpeed;
+	float maxFireRate;
+	float fireRateTimer;
 };
