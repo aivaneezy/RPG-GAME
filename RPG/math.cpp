@@ -15,6 +15,8 @@ sf::Vector2f Math::normalizeVector(sf::Vector2f vector)
 
 }
 
+
+// ------------------------------ COLLISION DETECTION -----------------------------
 /*
 
 rect1.right > rect2.left &&

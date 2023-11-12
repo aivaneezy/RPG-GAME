@@ -4,7 +4,7 @@
 #include <math.h>
 #include <vector>
 #include "enemy.h"
-
+#include "bullet.h"
 
 class Player
 {
@@ -25,9 +25,9 @@ public:
 private:
 	
 	sf::Texture playerTexture;
-	std::vector<sf::RectangleShape> bullets; // vector of multiple bullets
-	float bulletspeed;
+	std::vector<Bullet> bullets; // vector of multiple bullets
 	float playerSpeed;
 	float maxFireRate;
 	float fireRateTimer;
+	float bulletSpeed;
 };

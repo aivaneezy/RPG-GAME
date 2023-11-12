@@ -11,10 +11,10 @@
 
 /*Costructor*/
 Player::Player() :
-    bulletspeed(0.3f),
     playerSpeed(2.0f),
-    maxFireRate(500),
-    fireRateTimer(0)
+    maxFireRate(200),
+    fireRateTimer(0),
+    bulletSpeed(0.5f)
 {
 }
 
@@ -84,11 +84,10 @@ void Player::Update(float deltaTime, Enemy& enemy, sf::Vector2f &mousePos)
    
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && fireRateTimer >= maxFireRate)
     {
-        bullets.push_back(sf::RectangleShape(sf::Vector2f(50.f, 25.f)));
-
+        /*pushing a bullet using the Bullet class object as a data type*/
+        bullets.push_back(Bullet()); 
         int lastElement = bullets.size() - 1; // last element of the vector
-        bullets[lastElement].setPosition(playerSprite.getPosition()); // Bullet Initial Position
-
+        bullets[lastElement].Initialize(playerSprite.getPosition(), mousePos, bulletSpeed); // bullet Initial Position
         fireRateTimer = 0; // resetting the fireRateTimer
 
     }
@@ -101,20 +100,14 @@ void Player::Update(float deltaTime, Enemy& enemy, sf::Vector2f &mousePos)
     /* Moving the bullets to a target*/
     for (size_t i = 0; i < bullets.size(); i++)
     {
-        /* Calculating the  direction for the bullet, putting the bullet inside the  for loop is useful so that each bullets has its own calculation
-        in each single frame when a player shot. 
-        */
-        sf::Vector2f direction = mousePos - bullets[i].getPosition(); // moving the bullets relative to the mouse position
-
-        /* Moving the bullets to a target*/
-        direction = Math::normalizeVector(direction);
-        bullets[i].setPosition(bullets[i].getPosition() + direction * bulletspeed * deltaTime); // multipying of a very small amount to normalize the vector
+        /* Updating the bullet position every frame*/
+        bullets[i].Update(deltaTime);
 
         /*If the enemy is alive check for collision*/
         if (enemy.health > 0)
         {
             /*Collision detection between bulllets and enemy*/
-            if (Math::CheckRectCollision(bullets[i].getGlobalBounds(), enemy.enemySprite.getGlobalBounds()))
+            if (Math::CheckRectCollision(bullets[i].GetGlobalBounds(), enemy.enemySprite.getGlobalBounds()))
             {
                 /* bullets.begin() returns an iterator + the index we want to delete*/
                 bullets.erase(bullets.begin() + i);
@@ -125,8 +118,6 @@ void Player::Update(float deltaTime, Enemy& enemy, sf::Vector2f &mousePos)
                 std::cout << "Enemy health: " << enemy.health << std::endl;
             }
         }
-       
-
     }
 
     // make the rectangle follow the sprite
@@ -143,9 +134,9 @@ void  Player::Draw(sf::RenderWindow& window)
 {
      window.draw(playerSprite);
      window.draw(boudingRectangle);
-     for (int i = 0; i < bullets.size(); i++)
+     for (size_t i = 0; i < bullets.size(); i++)
      {
-         window.draw(bullets[i]);
+         bullets[i].Draw(window);
      }
      
 }
